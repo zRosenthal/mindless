@@ -79,7 +79,7 @@ export class Router<
       if (route.method !== request.method) {
         return false
       }
-      let params = route.url.match(request.path)
+      let params = request.path.match((route.url as any).spec)
       if (params) {
         request.addMultiple(params)
         return true
@@ -103,8 +103,9 @@ export class Router<
       const method = route.controller.prototype[route.function]
       if (method === undefined) {
         throw new Error(
-          `'${route.function}' is not a method on the controller '${route
-            .controller.name}'`
+          `'${route.function}' is not a method on the controller '${
+            route.controller.name
+          }'`
         )
       }
       this.methodParameterCache[key] = Router.getParameters(method)
